@@ -316,3 +316,14 @@
 @keyframes acc-draw {
   to { stroke-dashoffset: 0; }
 }
+
+@layer components {
+  .live-value {
+    animation: live-pop 480ms ease-out;
+  }
+}
+
+@keyframes live-pop {
+  from { transform: translateY(3px) scale(0.96); opacity: 0.35; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}

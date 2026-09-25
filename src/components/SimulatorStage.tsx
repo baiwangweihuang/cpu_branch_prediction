@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Slider } from '@/components/ui/slider'
-import PredictorDiagram from '@/components/PredictorDiagram'
+import LivePredictorDiagram from '@/components/LivePredictorDiagram'
 import { PATTERN_EN, PREDICTOR_EN, UI, type Lang } from '@/data/i18n-content'
 import { PATTERNS, predictorById, type PatternId, type PredictorId } from '@/data/predictors'
 import { accuracy, counterLabel, createSimState, stepPredictor, type SimState } from '@/lib/simulator'
@@ -208,7 +208,7 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
               </Badge>
             </div>
             <div className="h-36 overflow-hidden rounded-xl border border-white/10 bg-slate-950/60 p-4">
-              <PredictorDiagram meta={meta} />
+              <LivePredictorDiagram meta={meta} sim={sim} />
             </div>
           </div>
 
