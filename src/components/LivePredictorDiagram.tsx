@@ -24,12 +24,18 @@ function Node({ label, accent, hot = false }: { label: ReactNode; accent: string
   )
 }
 
-function Wire({ accent, vertical = false }: { accent: string; vertical?: boolean }) {
+function Wire({ accent, vertical = false, pulseKey }: { accent: string; vertical?: boolean; pulseKey?: number }) {
   return (
     <div
       className={vertical ? 'wire-v' : 'wire-h'}
       style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
-    />
+    >
+      <i
+        key={pulseKey}
+        className={vertical ? 'flow-pulse flow-pulse-v' : 'flow-pulse'}
+        style={{ background: accent, boxShadow: `0 0 12px ${accent}` }}
+      />
+    </div>
   )
 }
 
@@ -65,12 +71,12 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
     return (
       <div className="diagram-wrap">
         <Node label={<LiveValue step={step}>PC {lastPc.toString(2).padStart(4, '0')}</LiveValue>} accent={a} />
-        <Wire accent={a} />
+        <Wire accent={a} pulseKey={step} />
         <div className="flipflop" style={{ borderColor: `${a}aa` }}>
           <span key={`q-${step}`} className="ff-q live-value" style={{ background: a }}>Q{pred}</span>
           <span key={`d-${step}`} className="ff-d live-value">D{outcome}</span>
         </div>
-        <Wire accent={a} />
+        <Wire accent={a} pulseKey={step} />
         <Node label={outputLabel} accent={a} hot />
       </div>
     )
@@ -104,7 +110,7 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
     return (
       <div className="diagram-wrap table-wrap">
         <Node label={<LiveValue step={step}>PC {lastPc}</LiveValue>} accent={a} />
-        <Wire accent={a} />
+        <Wire accent={a} pulseKey={step} />
         <div className="mini-table">
           {Array.from({ length: 12 }, (_, i) => {
             const cell = start + i
@@ -149,7 +155,7 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
         <div className="shift-reg global">{sim.history.slice(0, 8).map((v, i) => bitCell(v, i * 70, i === 0))}</div>
         <div className="diagram-wrap">
           <Node label="GHR" accent={a} hot />
-          <Wire accent={a} />
+          <Wire accent={a} pulseKey={step} />
           <Node label={<LiveValue step={step}>PHT {idx}</LiveValue>} accent={a} />
         </div>
       </div>
@@ -183,11 +189,11 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
           <Node label={<LiveValue step={step}>Global {bitText(globalPred)}</LiveValue>} accent={a} />
         </div>
         <div className="diagram-wrap">
-          <Wire accent={a} />
+          <Wire accent={a} pulseKey={step} />
           <div className="chooser" style={{ borderColor: `${a}aa` }}>
             <LiveValue step={step}>C{chooser}/3</LiveValue>
           </div>
-          <Wire accent={a} />
+          <Wire accent={a} pulseKey={step} />
           <Node label={outputLabel} accent={a} hot />
         </div>
       </div>
@@ -216,7 +222,7 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
         ))}
         <div className="diagram-wrap">
           <Node label={<LiveValue step={step}>idx {idx}</LiveValue>} accent={a} />
-          <Wire accent={a} />
+          <Wire accent={a} pulseKey={step} />
           <Node label={outputLabel} accent={a} hot />
         </div>
       </div>

@@ -327,3 +327,42 @@
   from { transform: translateY(3px) scale(0.96); opacity: 0.35; }
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
+
+@layer components {
+  .wire-h,
+  .wire-v {
+    position: relative;
+  }
+
+  .flow-pulse {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    margin-top: -4px;
+    border-radius: 9999px;
+    animation: flow-x 650ms ease-out forwards;
+    pointer-events: none;
+  }
+
+  .flow-pulse-v {
+    top: 0;
+    left: 50%;
+    margin-top: 0;
+    margin-left: -4px;
+    animation-name: flow-y;
+  }
+}
+
+@keyframes flow-x {
+  from { left: 0; opacity: 0.25; transform: scale(0.7); }
+  45% { opacity: 1; }
+  to { left: calc(100% - 8px); opacity: 0; transform: scale(1.15); }
+}
+
+@keyframes flow-y {
+  from { top: 0; opacity: 0.25; transform: scale(0.7); }
+  45% { opacity: 1; }
+  to { top: calc(100% - 8px); opacity: 0; transform: scale(1.15); }
+}
