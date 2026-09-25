@@ -58,7 +58,7 @@ export default function Home() {
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
           <div>
             <h1 className="max-w-4xl text-5xl font-black leading-tight tracking-tight text-white md:text-7xl">
-              {isEn ? 'Branch Predictors' : '分支预测器'}
+              {isEn ? 'CPU Branch Predictors' : 'CPU 分支预测器'}
               <span className="block bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-rose-300 bg-clip-text text-transparent">
                 {isEn ? 'Animated Implementation Museum' : '动画实现博物馆'}
               </span>
