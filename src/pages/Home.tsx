@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react'
-import { ArrowDown, Cpu, GitBranch, Radar, ShieldAlert } from 'lucide-react'
+import { ArrowDown, Cpu, ExternalLink, GitBranch, Radar, ShieldAlert } from 'lucide-react'
 import PredictorDiagram from '@/components/PredictorDiagram'
 import SimulatorStage from '@/components/SimulatorStage'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { FRONTIER_WORKS } from '@/data/frontier'
 import { PREDICTORS, predictorById, type PredictorId } from '@/data/predictors'
 
 const familyColor: Record<string, string> = {
@@ -32,7 +33,7 @@ export default function Home() {
           <Badge className="border-cyan-300/30 bg-cyan-400/10 text-cyan-200" variant="outline">
             <Cpu className="mr-1 h-3.5 w-3.5" /> CPU Front-end Visual Lab
           </Badge>
-          <Badge className="border-white/10 bg-white/5 text-slate-300" variant="outline">10 个经典 / 现代分支预测器</Badge>
+          <Badge className="border-white/10 bg-white/5 text-slate-300" variant="outline">10 个经典 / 现代 + 6 个近10年前沿</Badge>
         </div>
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
           <div>
@@ -85,6 +86,42 @@ export default function Home() {
               <p className="text-xs text-slate-500">{p.name} · {p.era}</p>
               <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-400">{p.tagline}</p>
             </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-12">
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-slate-500">Frontier 2016—2026</p>
+            <h2 className="mt-2 text-3xl font-bold text-white">近10年顶会 / CBP 出色工作</h2>
+          </div>
+          <p className="hidden max-w-md text-right text-sm text-slate-500 md:block">主线很清晰：TAGE 仍是基线，新工作多在补长尾 H2P、数据值上下文和硬件可实施性。</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {FRONTIER_WORKS.map((w) => (
+            <Card key={w.id} className="border-white/10 bg-white/[0.04] transition hover:-translate-y-1 hover:border-white/25">
+              <CardHeader>
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <Badge variant="outline" className="border-white/15 text-slate-300">{w.year}</Badge>
+                  <span className="text-right text-xs text-slate-500">{w.venue}</span>
+                </div>
+                <CardTitle className="text-xl text-white">{w.cn}</CardTitle>
+                <p className="text-sm text-slate-500">{w.name}</p>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm leading-6 text-slate-300">
+                <p>{w.idea}</p>
+                <p className="text-slate-400"><span style={{ color: w.accent }}>为什么出色：</span>{w.why}</p>
+                <div className="flex flex-wrap gap-2">
+                  {w.hardware.map((h) => (
+                    <Badge key={h} variant="outline" className="border-white/15 text-slate-300">{h}</Badge>
+                  ))}
+                </div>
+                <a href={w.source} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-cyan-300 hover:text-cyan-200">
+                  来源 <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>
