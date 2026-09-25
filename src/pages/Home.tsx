@@ -105,7 +105,7 @@ export default function Home() {
                   <PredictorDiagram meta={p} />
                 </div>
                 <h3 className="mt-4 text-lg font-bold text-white">{isEn ? p.name : p.cn}</h3>
-                <p className="text-xs text-slate-500">{isEn ? p.cn : p.name} · {p.era}</p>
+                <p className="text-xs text-slate-500">{isEn ? p.era : `${p.name} · ${p.era}`}</p>
                 <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-400">{isEn ? en.tagline : p.tagline}</p>
               </button>
             )
@@ -132,7 +132,7 @@ export default function Home() {
                     <span className="text-right text-xs text-slate-500">{w.venue}</span>
                   </div>
                   <CardTitle className="text-xl text-white">{isEn ? w.name : w.cn}</CardTitle>
-                  <p className="text-sm text-slate-500">{isEn ? w.cn : w.name}</p>
+                  <p className="text-sm text-slate-500">{isEn ? w.venue : w.name}</p>
                   <div className="mt-3 h-24 rounded-2xl border border-white/10 bg-black/30 p-3">
                     <FrontierDiagram work={w} />
                   </div>
@@ -164,7 +164,7 @@ export default function Home() {
           <Card className="border-white/10 bg-white/[0.04]">
             <CardHeader>
               <CardTitle className="text-white">{t.current}{isEn ? selectedMeta.name : selectedMeta.cn}</CardTitle>
-              <p className="text-sm text-slate-500">{isEn ? selectedMeta.cn : selectedMeta.name} · {selectedMeta.era}</p>
+              <p className="text-sm text-slate-500">{isEn ? selectedMeta.era : `${selectedMeta.name} · ${selectedMeta.era}`}</p>
             </CardHeader>
             <CardContent className="space-y-4 text-sm leading-6 text-slate-300">
               <p>{isEn ? selectedEn.idea : selectedMeta.idea}</p>

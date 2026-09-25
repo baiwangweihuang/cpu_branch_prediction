@@ -47,7 +47,7 @@ export default function PredictorDiagram({ meta }: { meta: PredictorMeta }) {
   if (meta.diagram === 'counter') {
     return (
       <div className="diagram-wrap">
-        {['强NT', '弱NT', '弱T', '强T'].map((s, i) => (
+        {['SNT', 'WNT', 'WT', 'ST'].map((s, i) => (
           <div key={s} className="counter-state" style={{ animationDelay: `${i * 260}ms`, borderColor: `${a}88` }}>
             <span>{s}</span>
             <i style={{ background: a }} />
@@ -60,7 +60,7 @@ export default function PredictorDiagram({ meta }: { meta: PredictorMeta }) {
   if (meta.diagram === 'table') {
     return (
       <div className="diagram-wrap table-wrap">
-        <Node label="PC低位" accent={a} />
+        <Node label="PC low" accent={a} />
         <Wire accent={a} />
         <div className="mini-table">
           {Array.from({ length: 12 }, (_, i) => (
@@ -77,11 +77,11 @@ export default function PredictorDiagram({ meta }: { meta: PredictorMeta }) {
     return (
       <div className="diagram-col">
         <div className="diagram-wrap">
-          <Node label="分支A" accent={a} hot />
+          <Node label="Branch A" accent={a} hot />
           <div className="shift-reg">{bits.map((v, i) => bit(v, a, i * 90))}</div>
         </div>
         <div className="diagram-wrap">
-          <Node label="分支B" accent={a} />
+          <Node label="Branch B" accent={a} />
           <div className="shift-reg dim">{['0', '1', '0', '0', '1', '0'].map((v, i) => bit(v, a, i * 90))}</div>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function PredictorDiagram({ meta }: { meta: PredictorMeta }) {
         <div className="diagram-wrap">
           <Node label="GHR" accent={a} hot />
           <Wire accent={a} />
-          <Node label="共享PHT" accent={a} />
+          <Node label="shared PHT" accent={a} />
         </div>
       </div>
     )
@@ -109,7 +109,7 @@ export default function PredictorDiagram({ meta }: { meta: PredictorMeta }) {
           <Node label="GHR" accent={a} />
         </div>
         <div className="xor-gate" style={{ borderColor: `${a}aa`, color: a }}>⊕</div>
-        <Node label="索引" accent={a} hot />
+        <Node label="index" accent={a} hot />
       </div>
     )
   }
@@ -125,7 +125,7 @@ export default function PredictorDiagram({ meta }: { meta: PredictorMeta }) {
           <Wire accent={a} />
           <div className="chooser" style={{ borderColor: `${a}aa` }}>Chooser</div>
           <Wire accent={a} />
-          <Node label="预测" accent={a} hot />
+          <Node label="predict" accent={a} hot />
         </div>
       </div>
     )
@@ -177,7 +177,7 @@ export default function PredictorDiagram({ meta }: { meta: PredictorMeta }) {
           <span key={`${x}-${i}`} style={{ animationDelay: `${i * 160}ms` }}>{x}</span>
         ))}
       </div>
-      <Node label="目标PC" accent={a} hot />
+      <Node label="target PC" accent={a} hot />
     </div>
   )
 }

@@ -74,8 +74,8 @@ export default function FrontierDiagram({ work }: { work: FrontierWork }) {
         </div>
         <div className="share-link" style={{ background: `linear-gradient(90deg, transparent, ${a}, transparent)` }} />
         <div className="diagram-wrap">
-          <Node label="物理表共享" accent={a} hot />
-          <Node label="低延迟" accent={a} />
+          <Node label="shared tables" accent={a} hot />
+          <Node label="low latency" accent={a} />
         </div>
       </div>
     )
