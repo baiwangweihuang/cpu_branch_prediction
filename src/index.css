@@ -173,6 +173,52 @@
   .flush-shake {
     animation: flush-shake 520ms ease-in-out;
   }
+
+  .loop-dial {
+    @apply relative flex h-12 w-12 items-center justify-center rounded-full border bg-black/40 font-mono text-xs;
+    animation: sum-breathe 1.8s ease-in-out infinite;
+  }
+
+  .loop-dial.big {
+    @apply h-14 w-14;
+  }
+
+  .loop-dial i {
+    @apply absolute left-1/2 top-1/2 h-0.5 w-5 origin-left;
+    animation: needle-spin 2.4s linear infinite;
+  }
+
+  .conv-col {
+    @apply flex flex-col justify-center gap-1;
+    animation: row-in 2s ease-in-out infinite;
+  }
+
+  .conv-col span {
+    @apply h-3 w-3 rounded-sm border bg-white/[0.05];
+  }
+
+  .share-link {
+    @apply h-px w-24;
+    animation: wire-flow 1.4s linear infinite;
+  }
+
+  .target {
+    @apply relative flex h-14 w-14 items-center justify-center rounded-full border bg-black/30;
+    animation: target-lock 2s ease-in-out infinite;
+  }
+
+  .target span {
+    @apply absolute h-8 w-8 rounded-full border;
+  }
+
+  .target i {
+    @apply h-2 w-2 rounded-full;
+  }
+
+  .value-chip {
+    @apply rounded-md border bg-black/30 px-2 py-1 font-mono text-[10px] text-slate-300;
+    animation: bit-glow 1.7s ease-in-out infinite;
+  }
 }
 
 @keyframes node-pulse {
@@ -242,4 +288,13 @@
   40% { transform: translateX(6px); }
   60% { transform: translateX(-4px); }
   80% { transform: translateX(3px); }
+}
+
+@keyframes needle-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes target-lock {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(255,255,255,0); }
+  50% { transform: scale(1.08); box-shadow: 0 0 22px rgba(255,255,255,0.18); }
 }

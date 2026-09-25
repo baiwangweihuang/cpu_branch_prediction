@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { ArrowDown, Cpu, ExternalLink, GitBranch, Languages, Radar, ShieldAlert } from 'lucide-react'
+import FrontierDiagram from '@/components/FrontierDiagram'
 import PredictorDiagram from '@/components/PredictorDiagram'
 import SimulatorStage from '@/components/SimulatorStage'
 import { Badge } from '@/components/ui/badge'
@@ -123,6 +124,9 @@ export default function Home() {
                   </div>
                   <CardTitle className="text-xl text-white">{isEn ? w.name : w.cn}</CardTitle>
                   <p className="text-sm text-slate-500">{isEn ? w.cn : w.name}</p>
+                  <div className="mt-3 h-24 rounded-2xl border border-white/10 bg-black/30 p-3">
+                    <FrontierDiagram work={w} />
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm leading-6 text-slate-300">
                   <p>{isEn ? en.idea : w.idea}</p>
