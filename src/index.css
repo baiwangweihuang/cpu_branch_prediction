@@ -1,0 +1,245 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 5%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 7%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 7%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 187 92% 60%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 187 92% 60%;
+    --radius: 0.9rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+}
+
+@layer components {
+  .diagram-wrap {
+    @apply flex h-full items-center justify-center gap-2;
+  }
+
+  .diagram-col {
+    @apply flex h-full flex-col items-center justify-center gap-2;
+  }
+
+  .diagram-col.tight {
+    @apply gap-1;
+  }
+
+  .diagram-node {
+    @apply rounded-lg border bg-white/[0.04] px-2 py-1 font-mono text-[10px] text-slate-200;
+  }
+
+  .node-hot {
+    animation: node-pulse 1.6s ease-in-out infinite;
+  }
+
+  .wire-h {
+    @apply h-px w-6;
+    animation: wire-flow 1.4s linear infinite;
+  }
+
+  .wire-v {
+    @apply h-6 w-px;
+    animation: wire-flow 1.4s linear infinite;
+  }
+
+  .bit-cell {
+    @apply inline-flex h-6 w-6 items-center justify-center rounded-md border bg-black/40 font-mono text-[11px] text-slate-200;
+    animation: bit-glow 1.8s ease-in-out infinite;
+  }
+
+  .shift-reg {
+    @apply flex gap-1;
+  }
+
+  .shift-reg.dim {
+    @apply opacity-60;
+  }
+
+  .shift-reg.global .bit-cell {
+    animation-name: bit-shift;
+  }
+
+  .flipflop {
+    @apply relative flex h-14 w-14 items-center justify-center rounded-xl border bg-black/40;
+  }
+
+  .ff-q {
+    @apply absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full font-mono text-[10px] font-bold text-slate-950;
+    animation: ff-toggle 1.2s steps(2) infinite;
+  }
+
+  .ff-d {
+    @apply font-mono text-xs text-slate-400;
+  }
+
+  .counter-state {
+    @apply relative flex h-12 w-14 items-center justify-center overflow-hidden rounded-xl border bg-black/30 text-[10px] text-slate-300;
+    animation: counter-hop 2.4s ease-in-out infinite;
+  }
+
+  .counter-state i {
+    @apply absolute bottom-0 left-0 h-1 w-full opacity-70;
+  }
+
+  .mini-table {
+    @apply grid grid-cols-4 gap-1;
+  }
+
+  .mini-table.grow {
+    @apply flex-1;
+  }
+
+  .mini-table span {
+    @apply rounded border border-white/10 bg-white/[0.03] px-1 py-1 text-center font-mono text-[9px] text-slate-500;
+  }
+
+  .mini-table .cell-hot {
+    @apply bg-white/10 text-white;
+    animation: cell-ping 1.5s ease-in-out infinite;
+  }
+
+  .xor-gate {
+    @apply flex h-12 w-12 items-center justify-center rounded-full border bg-black/40 text-2xl;
+    animation: xor-spin 2.2s linear infinite;
+  }
+
+  .chooser {
+    @apply rounded-xl border bg-black/40 px-3 py-2 font-mono text-[10px] text-slate-200;
+    animation: node-pulse 1.8s ease-in-out infinite;
+  }
+
+  .tage-row {
+    @apply flex w-full items-center gap-2 rounded-xl border border-white/10 bg-black/20 p-1 font-mono text-[10px] text-slate-400;
+    animation: row-in 2.4s ease-in-out infinite;
+  }
+
+  .weight-chip {
+    @apply rounded-md border bg-black/30 px-2 py-1 font-mono text-[10px] text-slate-300;
+    animation: bit-glow 1.7s ease-in-out infinite;
+  }
+
+  .sum-node {
+    @apply flex h-12 w-12 items-center justify-center rounded-full border bg-black/40 text-xl;
+    animation: sum-breathe 1.5s ease-in-out infinite;
+  }
+
+  .ras-stack {
+    @apply flex min-w-16 flex-col-reverse gap-1 rounded-xl border bg-black/30 p-2;
+  }
+
+  .ras-stack span {
+    @apply rounded bg-white/[0.06] px-2 py-1 text-center font-mono text-[10px] text-slate-300;
+    animation: stack-pop 1.8s ease-in-out infinite;
+  }
+
+  .history-bit {
+    @apply flex h-8 w-8 items-center justify-center rounded-lg border bg-black/30 font-mono text-sm;
+  }
+
+  .history-new {
+    animation: history-in 420ms ease-out;
+  }
+
+  .flush-shake {
+    animation: flush-shake 520ms ease-in-out;
+  }
+}
+
+@keyframes node-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes wire-flow {
+  0% { opacity: 0.25; transform: scaleX(0.7); }
+  50% { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0.25; transform: scaleX(0.7); }
+}
+
+@keyframes bit-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0); transform: translateY(0); }
+  50% { box-shadow: 0 0 16px rgba(103,232,249,0.35); transform: translateY(-2px); }
+}
+
+@keyframes bit-shift {
+  0% { transform: translateX(-4px); opacity: 0.4; }
+  40% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(2px); opacity: 0.75; }
+}
+
+@keyframes ff-toggle {
+  0%, 49% { transform: scale(1); }
+  50%, 100% { transform: scale(1.18); }
+}
+
+@keyframes counter-hop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes cell-ping {
+  0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0); }
+  50% { box-shadow: 0 0 18px rgba(255,255,255,0.28); }
+}
+
+@keyframes xor-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes row-in {
+  0%, 100% { transform: translateX(0); opacity: 0.75; }
+  50% { transform: translateX(4px); opacity: 1; }
+}
+
+@keyframes sum-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+@keyframes stack-pop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes history-in {
+  from { transform: translateX(-10px) scale(0.8); opacity: 0; }
+  to { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+@keyframes flush-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
+}
