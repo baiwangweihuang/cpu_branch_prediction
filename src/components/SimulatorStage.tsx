@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Slider } from '@/components/ui/slider'
+import PredictorDiagram from '@/components/PredictorDiagram'
 import { PATTERN_EN, PREDICTOR_EN, UI, type Lang } from '@/data/i18n-content'
 import { PATTERNS, predictorById, type PatternId, type PredictorId } from '@/data/predictors'
 import { accuracy, counterLabel, createSimState, stepPredictor, type SimState } from '@/lib/simulator'
@@ -195,6 +196,21 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
           </div>
 
           <p className="mb-5 rounded-2xl border border-white/10 bg-black/30 p-3 text-sm leading-6 text-slate-300">{message}</p>
+
+          <div className="mb-5 rounded-2xl border border-white/10 bg-black/30 p-4">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{t.miniPath}</p>
+                <p className="mt-1 text-xs text-slate-500">{t.miniPathNote}</p>
+              </div>
+              <Badge variant="outline" className="border-white/15 font-mono text-xs text-slate-300">
+                {isEn ? meta.name : meta.cn}
+              </Badge>
+            </div>
+            <div className="h-36 overflow-hidden rounded-xl border border-white/10 bg-slate-950/60 p-4">
+              <PredictorDiagram meta={meta} />
+            </div>
+          </div>
 
           <div className="mb-5 rounded-2xl border border-white/10 bg-black/30 p-4">
             <div className="mb-3 flex items-center justify-between gap-3">
