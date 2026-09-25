@@ -95,8 +95,8 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
           </div>
         </div>
       </CardHeader>
-      <CardContent className="grid gap-6 p-6 lg:grid-cols-[360px_1fr]">
-        <div className="space-y-5">
+      <CardContent className="grid min-w-0 gap-6 p-4 sm:p-6 lg:grid-cols-[360px_1fr]">
+        <div className="min-w-0 space-y-5">
           <div className="flex flex-wrap gap-2">
             <Button onClick={() => setRunning((v) => !v)} className="bg-white text-slate-950 hover:bg-slate-200">
               {running ? <Pause className="mr-2 h-4 w-4" /> : <Play className="mr-2 h-4 w-4" />}
@@ -152,7 +152,7 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
           </div>
         </div>
 
-        <div className={`rounded-3xl border p-5 transition ${sim.lastCorrect === false ? 'flush-shake border-rose-400/50 bg-rose-950/20' : 'border-white/10 bg-white/[0.03]'}`}>
+        <div className={`min-w-0 rounded-3xl border p-4 transition sm:p-5 ${sim.lastCorrect === false ? 'flush-shake border-rose-400/50 bg-rose-950/20' : 'border-white/10 bg-white/[0.03]'}`}>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-sm text-slate-400">{t.lastPred}</p>
@@ -186,15 +186,15 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
                 {isEn ? meta.name : meta.cn}
               </Badge>
             </div>
-            <div className="flex min-h-56 items-center overflow-visible rounded-xl border border-white/10 bg-slate-950/60 p-4">
-              <div className="w-full">
+            <div className="flex min-h-56 min-w-0 items-center overflow-x-auto rounded-xl border border-white/10 bg-slate-950/60 p-4">
+              <div className="w-full min-w-max">
                 <LivePredictorDiagram meta={meta} sim={sim} />
               </div>
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 p-4">
+          <div className="grid min-w-0 gap-4 md:grid-cols-2">
+            <div className="min-w-0 rounded-2xl border border-white/10 p-4">
               <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">{t.history}</p>
               <div className="flex flex-wrap gap-1.5">
                 {sim.history.map((b, i) => (
@@ -211,16 +211,16 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
               <p className="text-xs leading-5 text-slate-500">{t.historyNote}</p>
             </div>
 
-            <div className="rounded-2xl border border-white/10 p-4">
+            <div className="min-w-0 rounded-2xl border border-white/10 p-4">
               <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">{t.counters}</p>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                 {hotCounters.map((c, i) => (
                   <div
                     key={i}
-                    className={`rounded-lg border p-2 text-center transition ${i === sim.lastIndex % 16 ? 'scale-105 border-white/50 bg-white/10' : 'border-white/10 bg-black/20'}`}
+                    className={`min-w-0 rounded-lg border p-2 text-center transition ${i === sim.lastIndex % 16 ? 'scale-105 border-white/50 bg-white/10' : 'border-white/10 bg-black/20'}`}
                   >
                     <span className="block font-mono text-sm text-white">{c}</span>
-                    <span className="block text-[10px] text-slate-500">{counterText(c)}</span>
+                    <span className="block truncate text-[10px] text-slate-500">{counterText(c)}</span>
                   </div>
                 ))}
               </div>
@@ -228,9 +228,9 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
           </div>
 
           {selected === 'tage' && (
-            <div className="mt-4 grid gap-2 md:grid-cols-3">
+            <div className="mt-4 grid min-w-0 gap-2 md:grid-cols-3">
               {sim.tage.map((table, ti) => (
-                <div key={ti} className="rounded-2xl border border-white/10 p-3">
+                <div key={ti} className="min-w-0 rounded-2xl border border-white/10 p-3">
                   <p className="mb-2 text-xs text-slate-400">T{ti} · {t.tageTables}</p>
                   <div className="grid grid-cols-4 gap-1">
                     {table.map((e, i) => (
@@ -258,8 +258,8 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
           )}
 
           {selected === 'indirect' && (
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 p-4">
+            <div className="mt-4 grid min-w-0 gap-4 md:grid-cols-2">
+              <div className="min-w-0 rounded-2xl border border-white/10 p-4">
                 <p className="mb-2 text-xs uppercase tracking-[0.2em] text-slate-500">BTB</p>
                 {sim.btb.map((e) => (
                   <div key={`${e.tag}-${e.target}`} className="mb-1 flex justify-between rounded bg-black/30 px-2 py-1 font-mono text-xs text-slate-300">
