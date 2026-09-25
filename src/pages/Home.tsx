@@ -20,7 +20,10 @@ const familyColor: Record<string, string> = {
 
 export default function Home() {
   const [selected, setSelected] = useState<PredictorId>('tage')
-  const [lang, setLang] = useState<Lang>('zh')
+  const [lang, setLang] = useState<Lang>(() => {
+    if (typeof window === 'undefined') return 'zh'
+    return window.localStorage.getItem('bp-lab-lang') === 'en' ? 'en' : 'zh'
+  })
   const stageRef = useRef<HTMLDivElement | null>(null)
   const selectedMeta = predictorById(selected)
   const isEn = lang === 'en'
@@ -30,6 +33,12 @@ export default function Home() {
   const jumpToStage = (id: PredictorId) => {
     setSelected(id)
     window.setTimeout(() => stageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30)
+  }
+
+  const toggleLang = () => {
+    const next: Lang = isEn ? 'zh' : 'en'
+    setLang(next)
+    window.localStorage.setItem('bp-lab-lang', next)
   }
 
   return (
@@ -42,7 +51,7 @@ export default function Home() {
             </Badge>
             <Badge className="border-white/10 bg-white/5 text-slate-300" variant="outline">{t.badge}</Badge>
           </div>
-          <Button variant="outline" onClick={() => setLang(isEn ? 'zh' : 'en')} className="border-white/20 bg-white/5 text-slate-100 hover:bg-white/10">
+          <Button variant="outline" onClick={toggleLang} className="border-white/20 bg-white/5 text-slate-100 hover:bg-white/10">
             <Languages className="mr-2 h-4 w-4" /> {isEn ? '中文' : 'English'}
           </Button>
         </div>
