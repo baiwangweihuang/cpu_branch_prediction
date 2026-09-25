@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Slider } from '@/components/ui/slider'
+import CircuitPanel from '@/components/CircuitPanel'
 import { PATTERN_EN, PREDICTOR_EN, UI, type Lang } from '@/data/i18n-content'
 import { PATTERNS, predictorById, type PatternId, type PredictorId } from '@/data/predictors'
 import { accuracy, counterLabel, createSimState, stepPredictor, type SimState } from '@/lib/simulator'
@@ -240,6 +241,8 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
               </svg>
             </div>
           </div>
+
+          <CircuitPanel selected={selected} sim={sim} accent={meta.accent} lang={lang} />
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl border border-white/10 p-4">
