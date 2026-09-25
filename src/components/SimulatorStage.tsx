@@ -186,8 +186,10 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
                 {isEn ? meta.name : meta.cn}
               </Badge>
             </div>
-            <div className="h-36 overflow-hidden rounded-xl border border-white/10 bg-slate-950/60 p-4">
-              <LivePredictorDiagram meta={meta} sim={sim} />
+            <div className="flex min-h-56 items-center overflow-visible rounded-xl border border-white/10 bg-slate-950/60 p-4">
+              <div className="w-full">
+                <LivePredictorDiagram meta={meta} sim={sim} />
+              </div>
             </div>
           </div>
 
