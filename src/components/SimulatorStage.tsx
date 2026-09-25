@@ -22,18 +22,15 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
   const [running, setRunning] = useState(true)
   const [speed, setSpeed] = useState(650)
   const [sim, setSim] = useState<SimState>(() => createSimState(selected))
-  const [trail, setTrail] = useState<Array<{ step: number; acc: number }>>([])
   const timer = useRef<number | null>(null)
   const pattern = PATTERNS.find((p) => p.id === patternId) ?? PATTERNS[0]
 
   useEffect(() => {
     setSim(createSimState(selected))
-    setTrail([])
   }, [selected])
 
   const resetSim = () => {
     setSim(createSimState(selected))
-    setTrail([])
   }
 
   useEffect(() => {
@@ -51,30 +48,12 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
     }
   }, [running, speed, pattern])
 
-  useEffect(() => {
-    if (sim.total === 0) return
-    setTrail((prev) => {
-      const point = { step: sim.step, acc: accuracy(sim) }
-      const last = prev[prev.length - 1]
-      if (last?.step === point.step) return prev
-      return [...prev.slice(-119), point]
-    })
-  }, [sim])
-
   const upcoming = useMemo(
     () => Array.from({ length: 24 }, (_, i) => pattern.outcome(sim.step + i)),
     [pattern, sim.step],
   )
 
   const acc = accuracy(sim)
-  const latest = trail[trail.length - 1]
-  const curvePoints = trail
-    .map((p, i) => {
-      const x = ((120 - trail.length + i) / 119) * 100
-      const y = 38 - (p.acc / 100) * 34
-      return `${x.toFixed(2)},${y.toFixed(2)}`
-    })
-    .join(' ')
   const hotCounters = sim.counters.slice(0, 16)
   const counterText = (v: number) => (isEn ? ['strong NT', 'weak NT', 'weak T', 'strong T'][Math.max(0, Math.min(3, v))] : counterLabel(v))
   const outcome = sim.history[0] ?? 0
@@ -209,51 +188,6 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
             </div>
             <div className="h-36 overflow-hidden rounded-xl border border-white/10 bg-slate-950/60 p-4">
               <LivePredictorDiagram meta={meta} sim={sim} />
-            </div>
-          </div>
-
-          <div className="mb-5 rounded-2xl border border-white/10 bg-black/30 p-4">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{t.accCurve}</p>
-                <p className="mt-1 text-xs text-slate-500">{t.lastWindow}</p>
-              </div>
-              <p className="font-mono text-sm text-slate-300">
-                {t.currentAcc} <span style={{ color: meta.accent }}>{latest ? `${latest.acc.toFixed(1)}%` : '—'}</span>
-              </p>
-            </div>
-            <div className="relative h-24 overflow-hidden rounded-xl bg-slate-950/60">
-              <span className="absolute right-2 top-1 font-mono text-[10px] text-slate-600">100%</span>
-              <span className="absolute right-2 top-1/2 -translate-y-1/2 font-mono text-[10px] text-slate-600">50%</span>
-              <span className="absolute bottom-1 right-2 font-mono text-[10px] text-slate-600">0%</span>
-              <svg className="h-full w-full" viewBox="0 0 100 42" preserveAspectRatio="none" role="img" aria-label={t.accCurve}>
-                <line x1="0" x2="100" y1="38" y2="38" stroke="rgba(148,163,184,0.25)" strokeDasharray="2 2" vectorEffect="non-scaling-stroke" />
-                <line x1="0" x2="100" y1="21" y2="21" stroke="rgba(148,163,184,0.16)" strokeDasharray="2 2" vectorEffect="non-scaling-stroke" />
-                <line x1="0" x2="100" y1="4" y2="4" stroke="rgba(148,163,184,0.25)" strokeDasharray="2 2" vectorEffect="non-scaling-stroke" />
-                {trail.length > 1 && (
-                  <polyline
-                    className="acc-curve"
-                    points={curvePoints}
-                    pathLength={1}
-                    fill="none"
-                    stroke={meta.accent}
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    vectorEffect="non-scaling-stroke"
-                  />
-                )}
-                {latest && (
-                  <circle
-                    key={latest.step}
-                    className="acc-dot"
-                    cx="100"
-                    cy={38 - (latest.acc / 100) * 34}
-                    r="1.8"
-                    fill={meta.accent}
-                  />
-                )}
-              </svg>
             </div>
           </div>
 
