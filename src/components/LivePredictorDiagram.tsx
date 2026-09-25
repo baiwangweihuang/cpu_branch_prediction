@@ -79,6 +79,7 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
   if (meta.diagram === 'counter') {
     return (
       <div className="diagram-wrap">
+        <Node label={<LiveValue step={step}>PC {lastPc}</LiveValue>} accent={a} />
         {['SNT', 'WNT', 'WT', 'ST'].map((s, i) => (
           <div
             key={s}
@@ -93,7 +94,7 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
             <i style={{ background: a, width: `${(i + 1) * 25}%` }} />
           </div>
         ))}
-        <Node label={<LiveValue step={step}>ctr {counter}/3</LiveValue>} accent={a} hot />
+        <Node label={<LiveValue step={step} color={resultColor}>ctr {counter}/3 → {bitText(pred)}</LiveValue>} accent={a} hot />
       </div>
     )
   }
@@ -196,6 +197,7 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
   if (meta.diagram === 'tage') {
     return (
       <div className="diagram-col">
+        <div className="shift-reg global">{sim.history.slice(0, 8).map((v, i) => bitCell(v, i * 70, i === 0))}</div>
         {[3, 6, 11].map((n, ti) => (
           <div key={n} className="tage-row" style={{ animationDelay: `${ti * 180}ms` }}>
             <span style={{ color: a }}>H{n}</span>
@@ -212,6 +214,11 @@ export default function LivePredictorDiagram({ meta, sim }: { meta: PredictorMet
             </div>
           </div>
         ))}
+        <div className="diagram-wrap">
+          <Node label={<LiveValue step={step}>idx {idx}</LiveValue>} accent={a} />
+          <Wire accent={a} />
+          <Node label={outputLabel} accent={a} hot />
+        </div>
       </div>
     )
   }
