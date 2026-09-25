@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { FRONTIER_WORKS } from '@/data/frontier'
-import { FRONTIER_EN, PREDICTOR_EN, UI, type Lang } from '@/data/i18n-content'
+import { FAMILY_EN, FRONTIER_EN, FRONTIER_HARDWARE_EN, PREDICTOR_EN, PREDICTOR_HARDWARE_EN, UI, type Lang } from '@/data/i18n-content'
 import { PREDICTORS, predictorById, type PredictorId } from '@/data/predictors'
 
 const familyColor: Record<string, string> = {
@@ -90,7 +90,7 @@ export default function Home() {
               >
                 <div className="mb-3 flex items-center justify-between">
                   <span className="font-mono text-xs text-slate-500">#{p.rank}</span>
-                  <span className={`rounded-full border px-2 py-0.5 text-[11px] ${familyColor[p.family]}`}>{p.family}</span>
+                  <span className={`rounded-full border px-2 py-0.5 text-[11px] ${familyColor[p.family]}`}>{isEn ? FAMILY_EN[p.family] : p.family}</span>
                 </div>
                 <div className="h-28 rounded-2xl border border-white/10 bg-black/30 p-3">
                   <PredictorDiagram meta={p} />
@@ -132,7 +132,7 @@ export default function Home() {
                   <p>{isEn ? en.idea : w.idea}</p>
                   <p className="text-slate-400"><span style={{ color: w.accent }}>{t.why}</span>{isEn ? en.why : w.why}</p>
                   <div className="flex flex-wrap gap-2">
-                    {w.hardware.map((h) => (
+                    {(isEn ? FRONTIER_HARDWARE_EN[w.id] : w.hardware).map((h) => (
                       <Badge key={h} variant="outline" className="border-white/15 text-slate-300">{h}</Badge>
                     ))}
                   </div>
@@ -162,7 +162,7 @@ export default function Home() {
               <div>
                 <p className="mb-2 text-xs uppercase tracking-[0.2em] text-slate-500">{t.keyHw}</p>
                 <div className="flex flex-wrap gap-2">
-                  {selectedMeta.hardware.map((h) => (
+                  {(isEn ? PREDICTOR_HARDWARE_EN[selected] : selectedMeta.hardware).map((h) => (
                     <Badge key={h} variant="outline" className="border-white/15 text-slate-300">{h}</Badge>
                   ))}
                 </div>

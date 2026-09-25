@@ -51,11 +51,25 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
   const acc = accuracy(sim)
   const hotCounters = sim.counters.slice(0, 16)
   const counterText = (v: number) => (isEn ? ['strong NT', 'weak NT', 'weak T', 'strong T'][Math.max(0, Math.min(3, v))] : counterLabel(v))
-  const message = isEn
-    ? sim.lastCorrect === null
-      ? t.startHint
-      : `${sim.lastCorrect ? 'Hit: the pipeline keeps running.' : 'Misprediction: flush the wrong path and re-steer the front-end.'} ${en.tagline}`
-    : sim.message
+  const outcome = sim.history[0] ?? 0
+  const baseMessage = sim.lastCorrect === null
+    ? t.startHint
+    : sim.lastCorrect
+      ? 'Hit: the pipeline keeps running.'
+      : 'Misprediction: flush the wrong path and re-steer the front-end.'
+  const detailEn = (() => {
+    if (sim.lastCorrect === null) return ''
+    if (selected === 'one-bit') return `The single bit was rewritten to ${bitText(outcome)}.`
+    if (selected === 'two-bit' || selected === 'bimodal') return `The saturating counter moved to ${sim.counters[sim.lastIndex]}/3, so one opposite outcome does not flip it.`
+    if (selected === 'local') return `This branch shifted its private history; index ${sim.lastIndex} was updated.`
+    if (selected === 'global') return `The shared global history fingerprint selected entry ${sim.lastIndex}.`
+    if (selected === 'gshare') return `PC XOR GHR produced index ${sim.lastIndex}.`
+    if (selected === 'tournament') return `The chooser compared local vs global experts and updated the winning side toward ${bitText(outcome)}.`
+    if (selected === 'tage') return `The longest tagged match acted as provider; on a miss a longer-history entry may be allocated.`
+    if (selected === 'perceptron') return `Weights were trained only when wrong or below the confidence threshold.`
+    return `Direction came from counters while BTB/RAS/indirect tables supplied the target side.`
+  })()
+  const message = isEn ? `${baseMessage} ${detailEn}` : sim.message
 
   return (
     <Card className="overflow-hidden border-white/10 bg-slate-950/70 shadow-2xl shadow-cyan-950/30 backdrop-blur">

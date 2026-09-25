@@ -213,3 +213,32 @@ export const PATTERN_EN: Record<PatternId, { name: string; desc: string }> = {
   correlated: { name: 'Cross-branch correlated', desc: 'Earlier outcomes influence later ones, favoring global history/TAGE.' },
   noisy: { name: 'Noisy mix', desc: 'Deterministic pattern with random flips; watch who stays stable.' },
 }
+
+export const FAMILY_EN: Record<string, string> = {
+  经典奠基: 'Classic foundations',
+  相关历史: 'Correlated history',
+  现代高性能: 'Modern high-performance',
+  目标预测: 'Target prediction',
+}
+
+export const PREDICTOR_HARDWARE_EN: Record<PredictorId, string[]> = {
+  'one-bit': ['PC index', '1-bit entry', 'direct writeback'],
+  'two-bit': ['2-bit counter table', 'saturating inc/dec', 'strong/weak FSM'],
+  bimodal: ['low PC index', 'PHT counters', 'no history register'],
+  local: ['local BHR', 'PHT pattern table', 'two-level index'],
+  global: ['GHR shift register', 'global PHT', 'history injection'],
+  gshare: ['GHR', 'XOR mixer', 'counter table'],
+  tournament: ['local predictor', 'global predictor', 'chooser counters'],
+  tage: ['geometric histories', 'tag match', 'provider/alt', 'useful bits'],
+  perceptron: ['weight table', '±1 features', 'adder tree', 'threshold training'],
+  indirect: ['BTB target cache', 'RAS return stack', 'indirect target table', 'type decode'],
+}
+
+export const FRONTIER_HARDWARE_EN: Record<string, string[]> = {
+  'tage-sc-l': ['TAGE tables', 'SC corrector', 'loop predictor', 'useful/confidence'],
+  imli: ['IMLI counter', 'multi-dim history index', 'loop context'],
+  branchnet: ['CNN/DBN', 'long-history features', 'offline/online training tradeoff'],
+  'realistic-tage-sc': ['shared physical tables', '1–5 SC tables', 'single-port banks', 'low-latency mux'],
+  bullseye: ['HIT', 'H2P cache', 'dual perceptrons', 'TAGE update suppression'],
+  lvcp: ['load tracking', 'value context', 'TAGE-SC-L sidecar'],
+}
