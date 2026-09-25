@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator'
 import { Slider } from '@/components/ui/slider'
 import LivePredictorDiagram from '@/components/LivePredictorDiagram'
 import { PATTERN_EN, PREDICTOR_EN, UI, type Lang } from '@/data/i18n-content'
-import { PATTERNS, predictorById, type PatternId, type PredictorId } from '@/data/predictors'
+import { PATTERNS, PREDICTORS, predictorById, type PatternId, type PredictorId } from '@/data/predictors'
 import { accuracy, counterLabel, createSimState, stepPredictor, type SimState } from '@/lib/simulator'
 
 const bitText = (b: number) => (b === 1 ? 'T' : 'NT')
@@ -279,9 +279,9 @@ export default function SimulatorStage({ selected, onSelect, lang }: { selected:
           )}
 
           <div className="mt-5 flex flex-wrap gap-2">
-            {(['one-bit', 'two-bit', 'tage', 'perceptron', 'indirect'] as PredictorId[]).map((id) => (
-              <Button key={id} size="sm" variant={id === selected ? 'default' : 'outline'} onClick={() => onSelect(id)} className={id === selected ? 'bg-white text-slate-950' : 'border-white/15 text-slate-300'}>
-                {t.switchTo} {isEn ? predictorById(id).name : predictorById(id).cn}
+            {PREDICTORS.map((p) => (
+              <Button key={p.id} size="sm" variant={p.id === selected ? 'default' : 'outline'} onClick={() => onSelect(p.id)} className={p.id === selected ? 'bg-white text-slate-950' : 'border-white/15 text-slate-300'}>
+                {t.switchTo} {isEn ? p.name : p.cn}
               </Button>
             ))}
           </div>
