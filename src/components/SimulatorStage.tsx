@@ -6,13 +6,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Slider } from '@/components/ui/slider'
+import { PATTERN_EN, PREDICTOR_EN, UI, type Lang } from '@/data/i18n-content'
 import { PATTERNS, predictorById, type PatternId, type PredictorId } from '@/data/predictors'
 import { accuracy, counterLabel, createSimState, stepPredictor, type SimState } from '@/lib/simulator'
 
 const bitText = (b: number) => (b === 1 ? 'T' : 'NT')
 
-export default function SimulatorStage({ selected, onSelect }: { selected: PredictorId; onSelect: (id: PredictorId) => void }) {
+export default function SimulatorStage({ selected, onSelect, lang }: { selected: PredictorId; onSelect: (id: PredictorId) => void; lang: Lang }) {
   const meta = predictorById(selected)
+  const en = PREDICTOR_EN[selected]
+  const isEn = lang === 'en'
+  const t = UI[lang]
   const [patternId, setPatternId] = useState<PatternId>('loop')
   const [running, setRunning] = useState(true)
   const [speed, setSpeed] = useState(650)
@@ -46,6 +50,12 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
 
   const acc = accuracy(sim)
   const hotCounters = sim.counters.slice(0, 16)
+  const counterText = (v: number) => (isEn ? ['strong NT', 'weak NT', 'weak T', 'strong T'][Math.max(0, Math.min(3, v))] : counterLabel(v))
+  const message = isEn
+    ? sim.lastCorrect === null
+      ? t.startHint
+      : `${sim.lastCorrect ? 'Hit: the pipeline keeps running.' : 'Misprediction: flush the wrong path and re-steer the front-end.'} ${en.tagline}`
+    : sim.message
 
   return (
     <Card className="overflow-hidden border-white/10 bg-slate-950/70 shadow-2xl shadow-cyan-950/30 backdrop-blur">
@@ -54,14 +64,14 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
           <div>
             <CardTitle className="flex items-center gap-2 text-2xl text-white">
               <Zap className="h-5 w-5" style={{ color: meta.accent }} />
-              实时动画实验台：{meta.cn}
+              {t.stageTitle}{isEn ? meta.name : meta.cn}
             </CardTitle>
-            <p className="mt-1 text-sm text-slate-400">{meta.tagline}</p>
+            <p className="mt-1 text-sm text-slate-400">{isEn ? en.tagline : meta.tagline}</p>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-white/15 text-slate-300">step {sim.step}</Badge>
+            <Badge variant="outline" className="border-white/15 text-slate-300">{t.step} {sim.step}</Badge>
             <Badge className="text-slate-950" style={{ background: meta.accent }}>
-              准确率 {acc.toFixed(1)}%
+              {t.accuracy} {acc.toFixed(1)}%
             </Badge>
           </div>
         </div>
@@ -71,42 +81,45 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
           <div className="flex flex-wrap gap-2">
             <Button onClick={() => setRunning((v) => !v)} className="bg-white text-slate-950 hover:bg-slate-200">
               {running ? <Pause className="mr-2 h-4 w-4" /> : <Play className="mr-2 h-4 w-4" />}
-              {running ? '暂停' : '播放'}
+              {running ? t.pause : t.play}
             </Button>
             <Button variant="outline" onClick={() => setSim((s) => stepPredictor(s, pattern.outcome(s.step)))} className="border-white/15 text-slate-200">
-              <StepForward className="mr-2 h-4 w-4" /> 单步
+              <StepForward className="mr-2 h-4 w-4" /> {t.oneStep}
             </Button>
             <Button variant="ghost" onClick={() => setSim(createSimState(selected))} className="text-slate-300">
-              <RotateCcw className="mr-2 h-4 w-4" /> 重置
+              <RotateCcw className="mr-2 h-4 w-4" /> {t.reset}
             </Button>
           </div>
 
           <div>
             <div className="mb-2 flex items-center justify-between text-sm text-slate-400">
-              <span>动画节奏</span>
-              <span>{speed} ms / 分支</span>
+              <span>{t.speed}</span>
+              <span>{speed} {t.perBranch}</span>
             </div>
             <Slider value={[speed]} min={120} max={1400} step={20} onValueChange={(v) => setSpeed(v[0] ?? speed)} />
           </div>
 
           <div>
-            <p className="mb-2 text-sm font-medium text-slate-300">分支结果流</p>
+            <p className="mb-2 text-sm font-medium text-slate-300">{t.stream}</p>
             <div className="grid grid-cols-2 gap-2">
-              {PATTERNS.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => setPatternId(p.id)}
-                  className={`rounded-xl border p-3 text-left transition ${patternId === p.id ? 'border-cyan-300/60 bg-cyan-400/10' : 'border-white/10 bg-white/[0.03] hover:border-white/25'}`}
-                >
-                  <span className="block text-sm font-semibold text-slate-100">{p.name}</span>
-                  <span className="mt-1 block text-xs leading-5 text-slate-500">{p.desc}</span>
-                </button>
-              ))}
+              {PATTERNS.map((p) => {
+                const pEn = PATTERN_EN[p.id]
+                return (
+                  <button
+                    key={p.id}
+                    onClick={() => setPatternId(p.id)}
+                    className={`rounded-xl border p-3 text-left transition ${patternId === p.id ? 'border-cyan-300/60 bg-cyan-400/10' : 'border-white/10 bg-white/[0.03] hover:border-white/25'}`}
+                  >
+                    <span className="block text-sm font-semibold text-slate-100">{isEn ? pEn.name : p.name}</span>
+                    <span className="mt-1 block text-xs leading-5 text-slate-500">{isEn ? pEn.desc : p.desc}</span>
+                  </button>
+                )
+              })}
             </div>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-            <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">接下来流入前端</p>
+            <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">{t.upcoming}</p>
             <div className="flex flex-wrap gap-1.5">
               {upcoming.map((b, i) => (
                 <span
@@ -123,30 +136,30 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
         <div className={`rounded-3xl border p-5 transition ${sim.lastCorrect === false ? 'flush-shake border-rose-400/50 bg-rose-950/20' : 'border-white/10 bg-white/[0.03]'}`}>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-sm text-slate-400">最近一次预测</p>
+              <p className="text-sm text-slate-400">{t.lastPred}</p>
               <p className="mt-1 font-mono text-2xl text-white">
-                猜 <span style={{ color: meta.accent }}>{bitText(sim.lastPrediction)}</span>
+                {t.guess} <span style={{ color: meta.accent }}>{bitText(sim.lastPrediction)}</span>
                 {sim.lastCorrect !== null && (
                   <span className={sim.lastCorrect ? 'text-emerald-300' : 'text-rose-300'}>
-                    {' '}→ {sim.lastCorrect ? '命中' : '误预测冲刷'}
+                    {' '}→ {sim.lastCorrect ? t.hit : t.miss}
                   </span>
                 )}
               </p>
             </div>
             <div className="w-48">
               <div className="mb-1 flex justify-between text-xs text-slate-500">
-                <span>累计命中</span>
+                <span>{t.totalHit}</span>
                 <span>{sim.correct}/{sim.total}</span>
               </div>
               <Progress value={acc} className="h-2 bg-white/10" />
             </div>
           </div>
 
-          <p className="mb-5 rounded-2xl border border-white/10 bg-black/30 p-3 text-sm leading-6 text-slate-300">{sim.message}</p>
+          <p className="mb-5 rounded-2xl border border-white/10 bg-black/30 p-3 text-sm leading-6 text-slate-300">{message}</p>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl border border-white/10 p-4">
-              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">历史寄存器</p>
+              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">{t.history}</p>
               <div className="flex flex-wrap gap-1.5">
                 {sim.history.map((b, i) => (
                   <span
@@ -159,11 +172,11 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
                 ))}
               </div>
               <Separator className="my-4 bg-white/10" />
-              <p className="text-xs leading-5 text-slate-500">最新结果从左侧注入，旧位向右移动；不同预测器对这段历史的“看法”完全不同。</p>
+              <p className="text-xs leading-5 text-slate-500">{t.historyNote}</p>
             </div>
 
             <div className="rounded-2xl border border-white/10 p-4">
-              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">计数器/状态热区</p>
+              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">{t.counters}</p>
               <div className="grid grid-cols-4 gap-2">
                 {hotCounters.map((c, i) => (
                   <div
@@ -171,7 +184,7 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
                     className={`rounded-lg border p-2 text-center transition ${i === sim.lastIndex % 16 ? 'scale-105 border-white/50 bg-white/10' : 'border-white/10 bg-black/20'}`}
                   >
                     <span className="block font-mono text-sm text-white">{c}</span>
-                    <span className="block text-[10px] text-slate-500">{counterLabel(c)}</span>
+                    <span className="block text-[10px] text-slate-500">{counterText(c)}</span>
                   </div>
                 ))}
               </div>
@@ -180,9 +193,9 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
 
           {selected === 'tage' && (
             <div className="mt-4 grid gap-2 md:grid-cols-3">
-              {sim.tage.map((table, t) => (
-                <div key={t} className="rounded-2xl border border-white/10 p-3">
-                  <p className="mb-2 text-xs text-slate-400">T{t} · 几何历史</p>
+              {sim.tage.map((table, ti) => (
+                <div key={ti} className="rounded-2xl border border-white/10 p-3">
+                  <p className="mb-2 text-xs text-slate-400">T{ti} · {t.tageTables}</p>
                   <div className="grid grid-cols-4 gap-1">
                     {table.map((e, i) => (
                       <span key={i} className={`rounded border px-1 py-1 text-center font-mono text-[10px] ${e.tag >= 0 ? 'border-fuchsia-300/40 text-fuchsia-200' : 'border-white/10 text-slate-600'}`}>
@@ -197,7 +210,7 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
 
           {selected === 'perceptron' && (
             <div className="mt-4 rounded-2xl border border-white/10 p-4">
-              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">权重向量</p>
+              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">{t.weights}</p>
               <div className="flex flex-wrap gap-2">
                 {sim.weights.map((w, i) => (
                   <span key={i} className="rounded-lg border border-sky-300/30 bg-sky-400/10 px-2 py-1 font-mono text-xs text-sky-200">
@@ -232,7 +245,7 @@ export default function SimulatorStage({ selected, onSelect }: { selected: Predi
           <div className="mt-5 flex flex-wrap gap-2">
             {(['one-bit', 'two-bit', 'tage', 'perceptron', 'indirect'] as PredictorId[]).map((id) => (
               <Button key={id} size="sm" variant={id === selected ? 'default' : 'outline'} onClick={() => onSelect(id)} className={id === selected ? 'bg-white text-slate-950' : 'border-white/15 text-slate-300'}>
-                切到 {predictorById(id).cn}
+                {t.switchTo} {isEn ? predictorById(id).name : predictorById(id).cn}
               </Button>
             ))}
           </div>
